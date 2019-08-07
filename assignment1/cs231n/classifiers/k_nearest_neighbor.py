@@ -76,9 +76,7 @@ class KNearestNeighbor(object):
                 # not use a loop over dimension, nor use np.linalg.norm().          #
                 #####################################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-                pass
-
+                dists[i,j] = np.sqrt(np.sum(np.square(X[i] - self.X_train[j]), axis = 0))
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
 
@@ -163,9 +161,8 @@ class KNearestNeighbor(object):
             # Hint: Look up the function numpy.argsort.                             #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-            pass
-
+            indices = np.argsort(a = dists[i])
+            closest_y = self.y_train[indices[:k]]
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             #########################################################################
             # TODO:                                                                 #
@@ -176,7 +173,20 @@ class KNearestNeighbor(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            def mode(arr):
+                cntr = dict()
+                for i in arr:
+                    if i not in cntr.keys():
+                        cntr[i] = 1
+                    else:
+                        cntr[i] += 1
+                max_cnt = max(cntr.values())
+                max_keys = [i for i,j in cntr.items() if j == max_cnt]
+                if len(max_keys) > 1:
+                    return min(max_keys)
+                return max_keys[0]
+                
+            y_pred[i] = mode(closest_y)
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
